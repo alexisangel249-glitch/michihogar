@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { enviarEmailAdopcion } from '../config/formspree';
-
+import { API_URL } from '../api';
 const FormAdopcion = ({ compacto = false }) => {
   const [formData, setFormData] = useState({
     usuario_nombre: '', usuario_email: '', usuario_telefono: '', gato_id: '', motivo: ''
@@ -13,7 +13,7 @@ const FormAdopcion = ({ compacto = false }) => {
   useEffect(() => {
     const cargarGatos = async () => {
       try {
-        const respuesta = await fetch('http://localhost:3001/api/gatos');
+        const respuesta = await fetch('${API_URL}/api/gatos');
         const datos = await respuesta.json();
         setGatos(datos.filter(g => g.estado === 'Disponible'));
       } catch (error) { console.error('Error al cargar gatos:', error); }
@@ -39,7 +39,7 @@ const FormAdopcion = ({ compacto = false }) => {
     setMostrarConfirmacion(false);
 
     try {
-      const respuesta = await fetch('http://localhost:3001/api/solicitudes', {
+      const respuesta = await fetch('${API_URL}/api/solicitudes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

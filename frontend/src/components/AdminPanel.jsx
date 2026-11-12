@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+import { API_URL } from '../api';
 const AdminPanel = ({ onLogout }) => {
   const [pestañaActiva, setPestañaActiva] = useState('dashboard');
   const [estadisticas, setEstadisticas] = useState(null);
@@ -35,7 +35,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const cargarEstadisticas = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/admin/estadisticas');
+      const res = await fetch('${API_URL}/api/admin/estadisticas');
       const datos = await res.json();
       setEstadisticas(datos);
     } catch (error) { console.error('Error:', error); }
@@ -43,7 +43,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const cargarGatos = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/admin/gatos');
+      const res = await fetch('${API_URL}/api/admin/gatos');
       const datos = await res.json();
       setGatos(datos);
     } catch (error) { console.error('Error:', error); }
@@ -51,7 +51,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const cargarProductos = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/admin/productos');
+      const res = await fetch('${API_URL}/api/admin/productos');
       const datos = await res.json();
       setProductos(datos);
     } catch (error) { console.error('Error:', error); }
@@ -59,7 +59,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const cargarSolicitudes = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/admin/solicitudes');
+      const res = await fetch('${API_URL}/api/admin/solicitudes');
       const datos = await res.json();
       setSolicitudes(datos);
     } catch (error) { console.error('Error:', error); }
@@ -67,7 +67,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const cargarPedidos = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/admin/pedidos');
+      const res = await fetch('${API_URL}/api/admin/pedidos');
       const datos = await res.json();
       setPedidos(datos);
     } catch (error) { console.error('Error:', error); }
@@ -110,8 +110,8 @@ const AdminPanel = ({ onLogout }) => {
     e.preventDefault();
     try {
       const url = editandoGato 
-        ? `http://localhost:3001/api/admin/gatos/${editandoGato}`
-        : 'http://localhost:3001/api/admin/gatos';
+        ? `${API_URL}/api/admin/gatos/${editandoGato}`
+        : '${API_URL}/api/admin/gatos';
       const method = editandoGato ? 'PUT' : 'POST';
       
       const res = await fetch(url, {
@@ -141,7 +141,7 @@ const AdminPanel = ({ onLogout }) => {
   const eliminarGato = async (id) => {
     if (!confirm('¿Seguro que deseas eliminar este gato?')) return;
     try {
-      await fetch(`http://localhost:3001/api/admin/gatos/${id}`, { method: 'DELETE' });
+      await fetch(`${API_URL}/api/admin/gatos/${id}`, { method: 'DELETE' });
       setMensaje('Gato eliminado 🗑️');
       cargarGatos();
       cargarEstadisticas();
@@ -176,8 +176,8 @@ const AdminPanel = ({ onLogout }) => {
     e.preventDefault();
     try {
       const url = editandoProducto 
-        ? `http://localhost:3001/api/admin/productos/${editandoProducto}`
-        : 'http://localhost:3001/api/admin/productos';
+        ? `${API_URL}/api/admin/productos/${editandoProducto}`
+        : '${API_URL}/api/admin/productos';
       const method = editandoProducto ? 'PUT' : 'POST';
       
       const res = await fetch(url, {
@@ -211,7 +211,7 @@ const AdminPanel = ({ onLogout }) => {
   const eliminarProducto = async (id) => {
     if (!confirm('¿Seguro que deseas eliminar este producto?')) return;
     try {
-      await fetch(`http://localhost:3001/api/admin/productos/${id}`, { method: 'DELETE' });
+      await fetch(`${API_URL}/api/admin/productos/${id}`, { method: 'DELETE' });
       setMensaje('Producto eliminado 🗑️');
       cargarProductos();
       cargarEstadisticas();
@@ -223,7 +223,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const actualizarEstadoSolicitud = async (id, estado) => {
     try {
-      await fetch(`http://localhost:3001/api/admin/solicitudes/${id}/estado`, {
+      await fetch(`${API_URL}/api/admin/solicitudes/${id}/estado`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ estado })
@@ -234,7 +234,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const actualizarEstadoPedido = async (id, estado) => {
     try {
-      await fetch(`http://localhost:3001/api/admin/pedidos/${id}/estado`, {
+      await fetch(`${API_URL}/api/admin/pedidos/${id}/estado`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ estado })

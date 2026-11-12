@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { enviarEmailRegistro } from '../config/formspree';
-
+import { API_URL } from '../api';
 const Registro = ({ navegarA }) => {
   const [formData, setFormData] = useState({ nombre: '', email: '', telefono: '', password: '', confirmarPassword: '' });
   const [mensaje, setMensaje] = useState('');
@@ -25,7 +25,7 @@ const Registro = ({ navegarA }) => {
     }
 
     try {
-      const respuesta = await fetch('http://localhost:3001/api/usuarios', {
+      const respuesta = await fetch('${API_URL}/api/usuarios', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

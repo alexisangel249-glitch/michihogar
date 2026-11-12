@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { enviarEmailPedido } from '../config/formspree';
 import Ticket from './Ticket';
-
+import { API_URL } from '../api';
 const FormPedido = ({ compacto = false }) => {
   const { cart, clearCart, total } = useCart();
   const [formData, setFormData] = useState({ 
@@ -47,7 +47,7 @@ const FormPedido = ({ compacto = false }) => {
       const productosACopiar = [...cart];
       
       const promesas = productosACopiar.map((producto) =>
-        fetch('http://localhost:3001/api/pedidos', {
+        fetch('${API_URL}/api/pedidos', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

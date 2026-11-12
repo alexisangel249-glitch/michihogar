@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+import { API_URL } from '../api';
 const MisMensajes = ({ usuarioLogueado, navegarA }) => {
   const [mensajes, setMensajes] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -12,7 +12,7 @@ const MisMensajes = ({ usuarioLogueado, navegarA }) => {
 
   const cargarMensajes = async () => {
     try {
-      const respuesta = await fetch(`http://localhost:3001/api/mensajes/usuario/${usuarioLogueado.id}`);
+      const respuesta = await fetch(`${API_URL}/api/mensajes/usuario/${usuarioLogueado.id}`);
       const datos = await respuesta.json();
       setMensajes(datos);
     } catch (error) {
@@ -24,7 +24,7 @@ const MisMensajes = ({ usuarioLogueado, navegarA }) => {
 
   const marcarLeido = async (id) => {
     try {
-      await fetch(`http://localhost:3001/api/mensajes/${id}/leido`, { method: 'PUT' });
+      await fetch(`${API_URL}/api/mensajes/${id}/leido`, { method: 'PUT' });
       cargarMensajes();
     } catch (error) {
       console.error('Error al marcar como leído:', error);

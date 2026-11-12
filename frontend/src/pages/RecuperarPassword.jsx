@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import { API_URL } from '../api';
 const RecuperarPassword = ({ navegarA }) => {
   const [formData, setFormData] = useState({ email: '', nuevaPassword: '', confirmarPassword: '' });
   const [mensaje, setMensaje] = useState('');
@@ -25,7 +25,7 @@ const RecuperarPassword = ({ navegarA }) => {
     }
 
     try {
-      const respuesta = await fetch('http://localhost:3001/api/usuarios/recuperar', {
+      const respuesta = await fetch(`${API_URL}/api/usuarios/recuperar`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

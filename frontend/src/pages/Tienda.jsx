@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
-
+import { API_URL } from '../api';
 const Tienda = ({ usuarioLogueado, navegarA }) => {
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -8,7 +8,7 @@ const Tienda = ({ usuarioLogueado, navegarA }) => {
 
   const obtenerProductos = async () => {
     try {
-      const respuesta = await fetch('http://localhost:3001/api/productos');
+      const respuesta = await fetch(`${API_URL}/api/productos`);
       const datos = await respuesta.json();
       setProductos(datos);
     } catch (error) { 
