@@ -1,0 +1,65 @@
+/* ============================================= */
+/* ESTILOS GLOBALES DE MICHIADOPTA SHOP          */
+/* ============================================= */
+
+/* ⚠️ PRIMERO: el @import SIEMPRE va antes que cualquier otra regla */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .font-heading {
+    font-family: 'Fredoka One', cursive;
+  }
+  .font-body {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+/* Estilos para impresión del ticket */
+@media print {
+  /* Ocultar todo excepto el ticket */
+  body * {
+    visibility: hidden !important;
+  }
+  
+  /* Mostrar solo el ticket */
+  .fixed.inset-0 {
+    visibility: visible !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    background: white !important;
+  }
+  
+  .fixed.inset-0 * {
+    visibility: visible !important;
+  }
+  
+  /* Ocultar botones al imprimir */
+  .fixed.inset-0 button {
+    display: none !important;
+  }
+}
+
+/* Clase temporal para impresión */
+body.printing * {
+  visibility: hidden;
+}
+
+body.printing .fixed.inset-0,
+body.printing .fixed.inset-0 * {
+  visibility: visible;
+}
+
+body.printing .fixed.inset-0 button {
+  display: none !important;
+}
