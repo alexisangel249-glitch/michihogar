@@ -4,6 +4,7 @@
 /* ============================================= */
 
 import { useState } from 'react';
+
 import { API_URL } from '../api';
 
 const AdminLogin = ({ onLoginExitoso }) => {
@@ -17,7 +18,7 @@ const AdminLogin = ({ onLoginExitoso }) => {
     setError('');
 
     try {
-      const respuesta = await fetch('${API_URL}/api/admin/login', {
+      const respuesta = await fetch(`${API_URL}/api/admin/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password })
