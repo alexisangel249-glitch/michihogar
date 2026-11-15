@@ -47,7 +47,7 @@ const FormPedido = ({ compacto = false }) => {
       const productosACopiar = [...cart];
       
       const promesas = productosACopiar.map((producto) =>
-        fetch('${API_URL}/api/pedidos', {
+        fetch(`${API_URL}/api/pedidos`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
