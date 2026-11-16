@@ -7,7 +7,7 @@ const CatGatos = ({ navegarA }) => {
   useEffect(() => {
     const obtenerGatos = async () => {
       try {
-        const respuesta = await fetch('${API_URL}/api/gatos');
+        const respuesta = await fetch(`${API_URL}/api/gatos`);
         const datos = await respuesta.json();
         setGatos(datos.filter(g => g.estado === 'Disponible'));
       } catch (error) {
