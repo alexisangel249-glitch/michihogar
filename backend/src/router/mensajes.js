@@ -8,7 +8,19 @@ router.get('/usuario/:usuarioId', async (req, res) => {
   try {
     const { usuarioId } = req.params;
     const [rows] = await pool.query(
-      'SELECT * FROM mensajes WHERE usuario_id = ? ORDER BY fecha_envio DESC',
+      `SELECT m.*,
+              g.nombre AS gato_nombre,
+              pr.nombre AS producto_nombre,
+              p.cantidad AS cantidad_pedido
+       FROM mensajes m
+       LEFT JOIN gatos g
+         ON m.tipo = 'solicitud' AND m.referencia_id = g.id
+       LEFT JOIN pedidos p
+         ON m.tipo = 'pedido' AND m.referencia_id = p.id
+       LEFT JOIN productos pr
+         ON p.producto_id = pr.id
+       WHERE m.usuario_id = ?
+       ORDER BY m.fecha_envio DESC`,
       [usuarioId]
     );
     res.json(rows);
