@@ -66,60 +66,69 @@ const Login = ({ onLoginExitoso, navegarA }) => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h1>🐱 Iniciar Sesión</h1>
-        <p className="login-subtitle">Accede a tu cuenta de MichiAdopta</p>
+    <section className="min-h-[70vh] bg-michi-bg flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md bg-michi-card rounded-3xl p-6 sm:p-8 shadow-xl border-2 border-michi-accent">
+        <div className="text-center mb-8">
+          <div className="text-5xl mb-3">🐱</div>
+          <h1 className="font-heading text-3xl font-bold text-michi-primary">Iniciar Sesión</h1>
+          <p className="font-body text-michi-text/70 mt-2">Accede a tu cuenta de MichiAdopta</p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label>Correo electrónico *</label>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label htmlFor="login-email" className="block font-heading text-michi-text mb-2">Correo electrónico *</label>
             <input
+              id="login-email"
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               required
+              autoComplete="email"
               placeholder="tu@correo.com"
+              className="w-full box-border px-4 py-3 rounded-xl border-2 border-michi-accent bg-white text-michi-text focus:outline-none focus:border-michi-primary focus:ring-2 focus:ring-michi-primary/20"
             />
           </div>
 
-          <div className="form-group">
-            <label>Contraseña *</label>
+          <div>
+            <label htmlFor="login-password" className="block font-heading text-michi-text mb-2">Contraseña *</label>
             <input
+              id="login-password"
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               required
+              autoComplete="current-password"
               placeholder="••••••••"
+              className="w-full box-border px-4 py-3 rounded-xl border-2 border-michi-accent bg-white text-michi-text focus:outline-none focus:border-michi-primary focus:ring-2 focus:ring-michi-primary/20"
             />
           </div>
 
           {mensaje && (
-            <div className={`mensaje ${mensaje.includes('❌') ? 'error' : 'exito'}`}>
+            <div role="status" className={`p-3 rounded-xl text-sm text-center font-body ${mensaje.includes('❌') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
               {mensaje}
             </div>
           )}
 
-          <button type="submit" className="btn-login" disabled={cargando}>
+          <button type="submit" disabled={cargando} className="w-full bg-michi-primary text-white font-heading font-bold py-3 rounded-xl hover:bg-michi-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
             {cargando ? '⏳ Iniciando...' : '🔐 Iniciar Sesión'}
           </button>
         </form>
 
-        <div className="login-links">
-          <a href="#" onClick={() => navegarA('recuperar-password')}>
+        <div className="mt-6 text-center space-y-3 font-body text-sm">
+          <button type="button" onClick={() => navegarA('recuperar')} className="block w-full text-michi-primary font-bold hover:underline">
             🔑 ¿Olvidaste tu contraseña?
-          </a>
-          <p>
+          </button>
+          <p className="text-michi-text/70">
             ¿No tienes cuenta?{' '}
-            <a href="#" onClick={() => navegarA('registro')}>
+            <button type="button" onClick={() => navegarA('registro')} className="text-michi-primary font-bold hover:underline">
               Regístrate aquí
-            </a>
+            </button>
           </p>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
