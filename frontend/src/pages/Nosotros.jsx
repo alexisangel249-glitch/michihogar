@@ -61,18 +61,18 @@ const Nosotros = () => {
             ¡Ven a conocer a nuestros michis!
           </p>
           
-          {/* Mapa de Google Maps con coordenadas reales de Jilotepec */}
-          <div className="rounded-2xl overflow-hidden border-2 border-michi-accent shadow-lg mb-6">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d60034.89123456789!2d-99.5467!3d20.0167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d21f0b0b0b0b0b%3A0x0!2sJilotepec%2C+M%C3%A9x.!5e0!3m2!1ses!2smx!4v1234567890123!5m2!1ses!2smx"
-              width="100%"
-              height="450"
-              style={{ border: 0 }}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Ubicación de MichiAdopta en Jilotepec"
-            ></iframe>
+          {/* Panel de ubicación: evita que un bloqueo del iframe deje un recuadro roto */}
+          <div className="rounded-2xl overflow-hidden border-2 border-michi-accent shadow-lg mb-6 bg-gradient-to-br from-orange-50 via-white to-amber-100">
+            <div className="min-h-[260px] sm:min-h-[340px] flex flex-col items-center justify-center text-center p-8">
+              <div className="text-6xl mb-4" aria-hidden="true">📍</div>
+              <h3 className="font-heading text-2xl font-bold text-michi-primary mb-2">¡Estamos en Jilotepec!</h3>
+              <p className="font-body text-michi-text/80 max-w-md">
+                Jilotepec de Molina Enríquez, Estado de México
+              </p>
+              <p className="font-body text-sm text-michi-text/60 mt-3">
+                Consulta la ruta y las indicaciones directamente en Google Maps.
+              </p>
+            </div>
           </div>
 
           {/* Botón para abrir en Google Maps */}
