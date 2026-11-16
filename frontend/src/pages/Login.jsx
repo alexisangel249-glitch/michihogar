@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
+import { API_URL } from '../api';
 
 // URL del backend (desde variable de entorno o localhost por defecto)
-const API_URL = import.meta.env.VITE_API_URL || '${API_URL}';
+
 
 const Login = ({ onLoginExitoso, navegarA }) => {
   const [formData, setFormData] = useState({ email: '', password: '' });
