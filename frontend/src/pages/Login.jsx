@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useCart } from '../context/CartContext';
 import { API_URL } from '../api';
 
 // URL del backend (desde variable de entorno o localhost por defecto)
@@ -9,7 +8,6 @@ const Login = ({ onLoginExitoso, navegarA }) => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [mensaje, setMensaje] = useState('');
   const [cargando, setCargando] = useState(false);
-  const { addToCart } = useCart();
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -35,24 +33,19 @@ const Login = ({ onLoginExitoso, navegarA }) => {
           onLoginExitoso(datos.usuario);
         }
 
-        const cotizacionGuardada = localStorage.getItem('cotizacion_temporal');
+        let tieneCotizacionPendiente = false;
+        try {
+          const cotizacionGuardada = JSON.parse(localStorage.getItem('cotizacion_temporal') || '[]');
+          tieneCotizacionPendiente = Array.isArray(cotizacionGuardada) && cotizacionGuardada.length > 0;
+        } catch (error) {
+          console.error('No se pudo leer la cotización pendiente:', error);
+        }
 
-        if (cotizacionGuardada) {
-          const cotizacion = JSON.parse(cotizacionGuardada);
-
-          cotizacion.forEach(producto => {
-            for (let i = 0; i < producto.cantidad; i++) {
-              addToCart(producto);
-            }
-          });
-
-          localStorage.removeItem('cotizacion_temporal');
-
-          setMensaje('✅ ¡Bienvenido! Tu cotización se agregó al carrito. Redirigiendo...');
-
-          setTimeout(() => {
-            navegarA('carrito');
-          }, 1500);
+        if (tieneCotizacionPendiente) {
+          setMensaje('✅ ¡Bienvenido! Estamos recuperando tu cotización para que puedas comprarla...');
+          setTimeout(() => navegarA('carrito'), 900);
+        } else {
+          setTimeout(() => navegarA('home'), 700);
         }
       } else {
         setMensaje('❌ ' + (datos.mensaje || 'Error al iniciar sesión'));
