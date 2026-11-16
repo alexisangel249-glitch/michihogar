@@ -2,74 +2,98 @@ import { createContext, useState, useContext, useEffect } from 'react';
 
 const CartContext = createContext();
 
+const leerLista = (clave) => {
+  try {
+    const valor = JSON.parse(localStorage.getItem(clave) || '[]');
+    return Array.isArray(valor) ? valor : [];
+  } catch {
+    return [];
+  }
+};
+
+const combinarProductos = (carritoActual, productosNuevos) => {
+  const combinado = [...carritoActual];
+
+  productosNuevos.forEach((producto) => {
+    const cantidadNueva = Math.max(1, Number(producto.cantidad) || 1);
+    const indice = combinado.findIndex((item) => String(item.id) === String(producto.id));
+
+    if (indice >= 0) {
+      combinado[indice] = {
+        ...combinado[indice],
+        ...producto,
+        cantidad: (Number(combinado[indice].cantidad) || 1) + cantidadNueva
+      };
+    } else {
+      combinado.push({ ...producto, cantidad: cantidadNueva });
+    }
+  });
+
+  return combinado;
+};
+
 export const CartProvider = ({ children, usuarioLogueado }) => {
   const [cart, setCart] = useState([]);
+  const [loadedKey, setLoadedKey] = useState(null);
+  const [cotizacionRecuperada, setCotizacionRecuperada] = useState(false);
 
-  // 🟢 Obtener la clave única del carrito según el usuario
-  const getCartKey = () => {
-    if (usuarioLogueado && usuarioLogueado.id) {
-      return `cart_usuario_${usuarioLogueado.id}`;
-    }
-    return 'cart_invitado';
-  };
+  const usuarioId = usuarioLogueado?.id || usuarioLogueado?.email;
+  const cartKey = usuarioId ? `cart_usuario_${usuarioId}` : 'cart_invitado';
 
-  // 🟢 Cargar carrito del localStorage al iniciar o cambiar de usuario
   useEffect(() => {
-    const cartKey = getCartKey();
-    const carritoGuardado = localStorage.getItem(cartKey);
-    
-    if (carritoGuardado) {
-      setCart(JSON.parse(carritoGuardado));
-    } else {
-      setCart([]);
-    }
-  }, [usuarioLogueado]);
+    setLoadedKey(null);
+    let carritoInicial = leerLista(cartKey);
 
-  // 🟢 Guardar carrito en localStorage cada vez que cambie
+    if (usuarioLogueado) {
+      const cotizacionPendiente = leerLista('cotizacion_temporal');
+      if (cotizacionPendiente.length > 0) {
+        carritoInicial = combinarProductos(carritoInicial, cotizacionPendiente);
+        localStorage.setItem(cartKey, JSON.stringify(carritoInicial));
+        localStorage.removeItem('cotizacion_temporal');
+        setCotizacionRecuperada(true);
+      }
+    }
+
+    setCart(carritoInicial);
+    setLoadedKey(cartKey);
+  }, [cartKey, Boolean(usuarioLogueado)]);
+
   useEffect(() => {
-    const cartKey = getCartKey();
-    localStorage.setItem(cartKey, JSON.stringify(cart));
-  }, [cart, usuarioLogueado]);
+    if (loadedKey === cartKey) {
+      localStorage.setItem(cartKey, JSON.stringify(cart));
+    }
+  }, [cart, cartKey, loadedKey]);
 
   const addToCart = (product) => {
-    setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.id === product.id);
-      if (existingItem) {
-        return prevCart.map((item) =>
-          item.id === product.id ? { ...item, cantidad: item.cantidad + 1 } : item
-        );
-      }
-      return [...prevCart, { ...product, cantidad: 1 }];
-    });
+    setCart((prevCart) => combinarProductos(prevCart, [{ ...product, cantidad: 1 }]));
+  };
+
+  const addItemsToCart = (products) => {
+    setCart((prevCart) => combinarProductos(prevCart, products));
   };
 
   const removeFromCart = (productId) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+    setCart((prevCart) => prevCart.filter((item) => String(item.id) !== String(productId)));
   };
 
   const clearCart = () => {
     setCart([]);
+    setCotizacionRecuperada(false);
   };
 
-  // 🟢 NUEVO: Limpiar carrito completamente (para logout)
   const vaciarCarritoCompletamente = () => {
     setCart([]);
-    const cartKey = getCartKey();
     localStorage.removeItem(cartKey);
+    setCotizacionRecuperada(false);
   };
 
-  const total = cart.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
-  const totalItems = cart.reduce((acc, item) => acc + item.cantidad, 0);
+  const total = cart.reduce((acc, item) => acc + Number(item.precio) * Number(item.cantidad), 0);
+  const totalItems = cart.reduce((acc, item) => acc + Number(item.cantidad), 0);
 
   return (
-    <CartContext.Provider value={{ 
-      cart, 
-      addToCart, 
-      removeFromCart, 
-      clearCart, 
-      vaciarCarritoCompletamente,
-      total, 
-      totalItems 
+    <CartContext.Provider value={{
+      cart, addToCart, addItemsToCart, removeFromCart, clearCart,
+      vaciarCarritoCompletamente, cotizacionRecuperada, total, totalItems
     }}>
       {children}
     </CartContext.Provider>
