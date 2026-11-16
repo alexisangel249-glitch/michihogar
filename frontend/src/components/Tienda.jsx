@@ -8,7 +8,7 @@ const Tienda = () => {
 
   const obtenerProductos = async () => {
     try {
-      const respuesta = await fetch('${API_URL}/api/productos');
+      const respuesta = await fetch(`${API_URL}/api/productos`);
       const datos = await respuesta.json();
       setProductos(datos);
     } catch (error) { 
