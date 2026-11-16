@@ -7,7 +7,7 @@ const Cotizacion = ({ navegarA, usuarioLogueado }) => {
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [cotizacion, setCotizacion] = useState([]);
-  const { addToCart } = useCart();
+  const { addItemsToCart } = useCart();
 
   // Recuperar cotización guardada
   useEffect(() => {
@@ -125,12 +125,8 @@ const Cotizacion = ({ navegarA, usuarioLogueado }) => {
       return;
     }
 
-    // Agregar productos al carrito
-    cotizacion.forEach(producto => {
-      for (let i = 0; i < producto.cantidad; i++) {
-        addToCart(producto);
-      }
-    });
+    // Agregar la cotización completa respetando la cantidad de cada producto.
+    addItemsToCart(cotizacion);
 
     localStorage.removeItem('cotizacion_temporal');
     setCotizacion([]);
