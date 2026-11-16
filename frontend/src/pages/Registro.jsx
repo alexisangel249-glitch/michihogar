@@ -25,7 +25,7 @@ const Registro = ({ navegarA }) => {
     }
 
     try {
-      const respuesta = await fetch('${API_URL}/api/usuarios', {
+      const respuesta = await fetch(`${API_URL}/api/usuarios`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
