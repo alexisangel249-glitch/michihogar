@@ -4,7 +4,7 @@ import { enviarEmailPedido } from '../config/formspree';
 import Ticket from './Ticket';
 import { API_URL } from '../api';
 const FormPedido = ({ compacto = false }) => {
-  const { cart, clearCart, total } = useCart();
+  const { cart, clearCart, removeFromCart, total } = useCart();
   const [formData, setFormData] = useState({ 
     cliente_nombre: '', 
     cliente_email: '', 
@@ -148,7 +148,18 @@ const FormPedido = ({ compacto = false }) => {
                       <p className="text-xs text-michi-text/70">Cantidad: {producto.cantidad}</p>
                     </div>
                   </div>
-                  <p className="font-heading font-bold text-michi-primary">${producto.precio * producto.cantidad}</p>
+                  <div className="flex flex-col items-end gap-2 ml-3">
+                    <p className="font-heading font-bold text-michi-primary">${producto.precio * producto.cantidad}</p>
+                    <button
+                      type="button"
+                      onClick={() => removeFromCart(producto.id)}
+                      aria-label={`Eliminar ${producto.nombre} del pedido`}
+                      title="Eliminar producto del pedido"
+                      className="bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-red-600 transition-colors"
+                    >
+                      🗑️ Eliminar
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
