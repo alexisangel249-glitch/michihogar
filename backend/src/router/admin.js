@@ -9,20 +9,95 @@ import pool from '../../db.js';
 const router = Router();
 
 // =============================================
-// CONTRASEÑA DE ADMINISTRADOR (simple, para proyecto escolar)
-// En producción real se usaría JWT + bcrypt
+// ACCESO Y RECUPERACIÓN DEL ADMINISTRADOR
+// La contraseña inicial se conserva como michi2026.
+// Después de un cambio, el hash queda guardado en TiDB.
+// La recuperación exige ADMIN_RECOVERY_KEY configurada
+// como variable privada en Railway (backend).
 // =============================================
-const ADMIN_PASSWORD = 'michi2026';
+import bcrypt from 'bcrypt';
+import { timingSafeEqual } from 'node:crypto';
 
-// =============================================
-// POST /api/admin/login - Verificar contraseña
-// =============================================
-router.post('/login', (req, res) => {
-  const { password } = req.body;
-  if (password === ADMIN_PASSWORD) {
-    res.json({ ok: true, mensaje: 'Acceso concedido 🐱' });
-  } else {
-    res.status(401).json({ ok: false, mensaje: 'Contraseña incorrecta' });
+const ADMIN_PASSWORD_INITIAL = process.env.ADMIN_PASSWORD || 'michi2026';
+
+const ensureAdminCredentialsTable = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS admin_credentials (
+      id TINYINT NOT NULL PRIMARY KEY,
+      password_hash VARCHAR(255) NOT NULL,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )
+  `);
+};
+
+const getAdminPasswordHash = async () => {
+  await ensureAdminCredentialsTable();
+  const [rows] = await pool.query('SELECT password_hash FROM admin_credentials WHERE id = 1');
+  if (rows.length) return rows[0].password_hash;
+
+  const initialHash = await bcrypt.hash(ADMIN_PASSWORD_INITIAL, 12);
+  await pool.query(
+    'INSERT IGNORE INTO admin_credentials (id, password_hash) VALUES (1, ?)',
+    [initialHash]
+  );
+  const [saved] = await pool.query('SELECT password_hash FROM admin_credentials WHERE id = 1');
+  return saved[0].password_hash;
+};
+
+const safeSecretCompare = (provided, expected) => {
+  if (typeof provided !== 'string' || typeof expected !== 'string') return false;
+  const a = Buffer.from(provided);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
+};
+
+// POST /api/admin/login
+router.post('/login', async (req, res) => {
+  try {
+    const { password } = req.body;
+    if (typeof password !== 'string' || !password) {
+      return res.status(400).json({ ok: false, mensaje: 'Ingresa tu contraseña' });
+    }
+    const hash = await getAdminPasswordHash();
+    const valido = await bcrypt.compare(password, hash);
+    if (valido) return res.json({ ok: true, mensaje: 'Acceso concedido 🐱' });
+    return res.status(401).json({ ok: false, mensaje: 'Contraseña incorrecta' });
+  } catch (error) {
+    console.error('Error en login de administrador:', error);
+    return res.status(500).json({ ok: false, mensaje: 'No se pudo verificar el acceso' });
+  }
+});
+
+// POST /api/admin/recover-password
+// No permite solicitar un cambio sin la clave maestra privada.
+router.post('/recover-password', async (req, res) => {
+  try {
+    const { recoveryKey, newPassword } = req.body;
+    const configuredKey = process.env.ADMIN_RECOVERY_KEY;
+
+    if (!configuredKey) {
+      return res.status(503).json({
+        ok: false,
+        mensaje: 'La recuperación no está configurada. Contacta al responsable del sitio.'
+      });
+    }
+    if (!safeSecretCompare(recoveryKey, configuredKey)) {
+      return res.status(403).json({ ok: false, mensaje: 'Clave de recuperación incorrecta' });
+    }
+    if (typeof newPassword !== 'string' || newPassword.length < 10) {
+      return res.status(400).json({ ok: false, mensaje: 'La nueva contraseña debe tener al menos 10 caracteres' });
+    }
+
+    const hash = await bcrypt.hash(newPassword, 12);
+    await ensureAdminCredentialsTable();
+    await pool.query(
+      'INSERT INTO admin_credentials (id, password_hash) VALUES (1, ?) ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash)',
+      [hash]
+    );
+    return res.json({ ok: true, mensaje: 'Contraseña de administrador actualizada correctamente' });
+  } catch (error) {
+    console.error('Error al recuperar contraseña de administrador:', error);
+    return res.status(500).json({ ok: false, mensaje: 'No se pudo actualizar la contraseña' });
   }
 });
 
