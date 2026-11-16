@@ -1,7 +1,7 @@
 import { useCart } from '../context/CartContext';
 
 const Carrito = ({ navegarA }) => {
-  const { cart, removeFromCart, clearCart, total } = useCart();
+  const { cart, removeFromCart, clearCart, total, cotizacionRecuperada } = useCart();
 
   if (cart.length === 0) {
     return (
@@ -24,7 +24,13 @@ const Carrito = ({ navegarA }) => {
   return (
     <section className="py-20 px-4 bg-white min-h-screen">
       <div className="max-w-4xl mx-auto">
-        <h2 className="font-heading text-3xl font-bold text-michi-primary mb-8 text-center">🛒 Tu Carrito de Compras</h2>
+        <h2 className="font-heading text-3xl font-bold text-michi-primary mb-4 text-center">🛒 Tu Carrito de Compras</h2>
+        {cotizacionRecuperada && (
+          <div role="status" className="max-w-4xl mx-auto mb-6 rounded-2xl border-2 border-michi-secondary bg-green-50 px-5 py-4 text-center shadow-sm">
+            <p className="font-heading font-bold text-green-800">✅ ¡Cotización lista para comprar!</p>
+            <p className="text-sm text-green-700 mt-1">Recuperamos los productos y cantidades que habías cotizado antes de iniciar sesión.</p>
+          </div>
+        )}
         
         <div className="bg-michi-bg rounded-3xl p-8 shadow-lg border-2 border-michi-accent">
           {cart.map((item) => (
