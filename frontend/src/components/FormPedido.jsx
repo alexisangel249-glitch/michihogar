@@ -4,7 +4,7 @@ import { enviarEmailPedido } from '../config/formspree';
 import Ticket from './Ticket';
 import { API_URL } from '../api';
 const FormPedido = ({ compacto = false }) => {
-  const { cart, clearCart, removeFromCart, total } = useCart();
+  const { cart, clearCart, decreaseQuantity, total } = useCart();
   const [formData, setFormData] = useState({ 
     cliente_nombre: '', 
     cliente_email: '', 
@@ -152,12 +152,12 @@ const FormPedido = ({ compacto = false }) => {
                     <p className="font-heading font-bold text-michi-primary">${producto.precio * producto.cantidad}</p>
                     <button
                       type="button"
-                      onClick={() => removeFromCart(producto.id)}
-                      aria-label={`Eliminar ${producto.nombre} del pedido`}
-                      title="Eliminar producto del pedido"
+                      onClick={() => decreaseQuantity(producto.id)}
+                      aria-label={`Quitar una unidad de ${producto.nombre}`}
+                      title="Quitar una unidad del pedido"
                       className="bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-red-600 transition-colors"
                     >
-                      🗑️ Eliminar
+                      − 1 unidad
                     </button>
                   </div>
                 </div>
