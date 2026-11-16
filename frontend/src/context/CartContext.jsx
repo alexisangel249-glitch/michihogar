@@ -72,6 +72,17 @@ export const CartProvider = ({ children, usuarioLogueado }) => {
     setCart((prevCart) => combinarProductos(prevCart, products));
   };
 
+  // Reduce una unidad; elimina el producto únicamente cuando llega a cero.
+  const decreaseQuantity = (productId) => {
+    setCart((prevCart) => prevCart
+      .map((item) => String(item.id) === String(productId)
+        ? { ...item, cantidad: Math.max(0, (Number(item.cantidad) || 1) - 1) }
+        : item
+      )
+      .filter((item) => Number(item.cantidad) > 0)
+    );
+  };
+
   const removeFromCart = (productId) => {
     setCart((prevCart) => prevCart.filter((item) => String(item.id) !== String(productId)));
   };
@@ -92,7 +103,7 @@ export const CartProvider = ({ children, usuarioLogueado }) => {
 
   return (
     <CartContext.Provider value={{
-      cart, addToCart, addItemsToCart, removeFromCart, clearCart,
+      cart, addToCart, addItemsToCart, removeFromCart, decreaseQuantity, clearCart,
       vaciarCarritoCompletamente, cotizacionRecuperada, total, totalItems
     }}>
       {children}
