@@ -61,17 +61,32 @@ const Nosotros = () => {
             ¡Ven a conocer a nuestros michis!
           </p>
           
-          {/* Panel de ubicación: evita que un bloqueo del iframe deje un recuadro roto */}
-          <div className="rounded-2xl overflow-hidden border-2 border-michi-accent shadow-lg mb-6 bg-gradient-to-br from-orange-50 via-white to-amber-100">
-            <div className="min-h-[260px] sm:min-h-[340px] flex flex-col items-center justify-center text-center p-8">
-              <div className="text-6xl mb-4" aria-hidden="true">📍</div>
-              <h3 className="font-heading text-2xl font-bold text-michi-primary mb-2">¡Estamos en Jilotepec!</h3>
-              <p className="font-body text-michi-text/80 max-w-md">
-                Jilotepec de Molina Enríquez, Estado de México
-              </p>
-              <p className="font-body text-sm text-michi-text/60 mt-3">
-                Consulta la ruta y las indicaciones directamente en Google Maps.
-              </p>
+          {/* Ubicación en dos paneles: información a la izquierda y mapa interactivo a la derecha */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6 items-stretch">
+            <div className="rounded-2xl overflow-hidden border-2 border-michi-accent shadow-lg bg-gradient-to-br from-orange-50 via-white to-amber-100 min-h-[300px] sm:min-h-[340px]">
+              <div className="h-full min-h-[300px] sm:min-h-[340px] flex flex-col items-center justify-center text-center p-6 sm:p-8">
+                <div className="text-6xl mb-4" aria-hidden="true">📍</div>
+                <h3 className="font-heading text-2xl font-bold text-michi-primary mb-2">¡Estamos en Jilotepec!</h3>
+                <p className="font-body text-michi-text/80 max-w-md">
+                  Jilotepec de Molina Enríquez, Estado de México
+                </p>
+                <p className="font-body text-sm text-michi-text/60 mt-3">
+                  Conoce dónde estamos y consulta cómo llegar.
+                </p>
+              </div>
+            </div>
+
+            <div className="rounded-2xl overflow-hidden border-2 border-michi-accent shadow-lg bg-white min-h-[300px] sm:min-h-[340px]">
+              <iframe
+                title="Mapa interactivo de MichiAdopta en Jilotepec, Estado de México"
+                src="https://maps.google.com/maps?q=Jilotepec%20de%20Molina%20Enriquez%2C%20Estado%20de%20Mexico&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                width="100%"
+                height="340"
+                style={{ border: 0, display: 'block', minHeight: '300px' }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
           </div>
 
