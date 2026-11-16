@@ -88,7 +88,19 @@ const MisMensajes = ({ usuarioLogueado, navegarA }) => {
                     {msg.tipo}
                   </span>
                 </div>
-                <p className="font-body text-michi-text/80 mb-4">{msg.mensaje}</p>
+                <p className="font-body text-michi-text/80 mb-4">
+                  {msg.tipo === 'solicitud' && msg.gato_nombre
+                    ? msg.mensaje.replace(/michi ".*?"/i, `michi "${msg.gato_nombre}"`)
+                    : msg.tipo === 'pedido' && msg.producto_nombre
+                      ? msg.mensaje.replace(/\([^)]*\)/, `(${msg.producto_nombre} x${msg.cantidad_pedido || 1})`)
+                      : msg.mensaje}
+                </p>
+                {msg.tipo === 'solicitud' && msg.gato_nombre && (
+                  <p className="text-sm text-michi-text/70 mb-3">🐱 Michi relacionado: <strong>{msg.gato_nombre}</strong></p>
+                )}
+                {msg.tipo === 'pedido' && msg.producto_nombre && (
+                  <p className="text-sm text-michi-text/70 mb-3">🛍️ Producto relacionado: <strong>{msg.producto_nombre}</strong> · Cantidad: {msg.cantidad_pedido || 1}</p>
+                )}
                 {!msg.leido && (
                   <button 
                     onClick={() => marcarLeido(msg.id)}
