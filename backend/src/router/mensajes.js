@@ -13,8 +13,10 @@ router.get('/usuario/:usuarioId', async (req, res) => {
               pr.nombre AS producto_nombre,
               p.cantidad AS cantidad_pedido
        FROM mensajes m
+       LEFT JOIN solicitudes_adopcion s
+         ON m.tipo = 'solicitud' AND m.referencia_id = s.id
        LEFT JOIN gatos g
-         ON m.tipo = 'solicitud' AND m.referencia_id = g.id
+         ON s.gato_id = g.id
        LEFT JOIN pedidos p
          ON m.tipo = 'pedido' AND m.referencia_id = p.id
        LEFT JOIN productos pr
