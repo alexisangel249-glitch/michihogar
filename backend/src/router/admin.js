@@ -18,7 +18,7 @@ const router = Router();
 import bcrypt from 'bcrypt';
 import { timingSafeEqual } from 'node:crypto';
 
-const ADMIN_PASSWORD_INITIAL = process.env.ADMIN_PASSWORD || 'michi2026';
+const ADMIN_PASSWORD_INITIAL = process.env.ADMIN_PASSWORD;
 
 const ensureAdminCredentialsTable = async () => {
   await pool.query(`
@@ -35,6 +35,7 @@ const getAdminPasswordHash = async () => {
   const [rows] = await pool.query('SELECT password_hash FROM admin_credentials WHERE id = 1');
   if (rows.length) return rows[0].password_hash;
 
+  if (!ADMIN_PASSWORD_INITIAL) throw new Error('Falta configurar ADMIN_PASSWORD en el backend');
   const initialHash = await bcrypt.hash(ADMIN_PASSWORD_INITIAL, 12);
   await pool.query(
     'INSERT IGNORE INTO admin_credentials (id, password_hash) VALUES (1, ?)',
