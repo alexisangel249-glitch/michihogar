@@ -35,7 +35,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const cargarEstadisticas = async () => {
     try {
-      const res = await fetch('${API_URL}/api/admin/estadisticas');
+      const res = await fetch(`${API_URL}/api/admin/estadisticas`);
       const datos = await res.json();
       setEstadisticas(datos);
     } catch (error) { console.error('Error:', error); }
@@ -43,7 +43,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const cargarGatos = async () => {
     try {
-      const res = await fetch('${API_URL}/api/admin/gatos');
+      const res = await fetch(`${API_URL}/api/admin/gatos`);
       const datos = await res.json();
       setGatos(datos);
     } catch (error) { console.error('Error:', error); }
@@ -51,7 +51,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const cargarProductos = async () => {
     try {
-      const res = await fetch('${API_URL}/api/admin/productos');
+      const res = await fetch(`${API_URL}/api/admin/productos`);
       const datos = await res.json();
       setProductos(datos);
     } catch (error) { console.error('Error:', error); }
@@ -59,7 +59,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const cargarSolicitudes = async () => {
     try {
-      const res = await fetch('${API_URL}/api/admin/solicitudes');
+      const res = await fetch(`${API_URL}/api/admin/solicitudes`);
       const datos = await res.json();
       setSolicitudes(datos);
     } catch (error) { console.error('Error:', error); }
@@ -67,7 +67,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const cargarPedidos = async () => {
     try {
-      const res = await fetch('${API_URL}/api/admin/pedidos');
+      const res = await fetch(`${API_URL}/api/admin/pedidos`);
       const datos = await res.json();
       setPedidos(datos);
     } catch (error) { console.error('Error:', error); }
@@ -111,7 +111,7 @@ const AdminPanel = ({ onLogout }) => {
     try {
       const url = editandoGato 
         ? `${API_URL}/api/admin/gatos/${editandoGato}`
-        : '${API_URL}/api/admin/gatos';
+        : `${API_URL}/api/admin/gatos`;
       const method = editandoGato ? 'PUT' : 'POST';
       
       const res = await fetch(url, {
@@ -177,7 +177,7 @@ const AdminPanel = ({ onLogout }) => {
     try {
       const url = editandoProducto 
         ? `${API_URL}/api/admin/productos/${editandoProducto}`
-        : '${API_URL}/api/admin/productos';
+        : `${API_URL}/api/admin/productos`;
       const method = editandoProducto ? 'PUT' : 'POST';
       
       const res = await fetch(url, {
