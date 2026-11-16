@@ -193,7 +193,10 @@ router.put('/solicitudes/:id/estado', async (req, res) => {
     const { estado } = req.body;
 
     // Obtener la solicitud para saber el email del usuario
-    const [solicitud] = await pool.query('SELECT * FROM solicitudes_adopcion WHERE id = ?', [id]);
+    const [solicitud] = await pool.query(
+      'SELECT s.*, g.nombre AS gato_nombre FROM solicitudes_adopcion s LEFT JOIN gatos g ON s.gato_id = g.id WHERE s.id = ?',
+      [id]
+    );
     
     if (solicitud.length === 0) {
       return res.status(404).json({ mensaje: 'Solicitud no encontrada' });
@@ -255,7 +258,10 @@ router.put('/pedidos/:id/estado', async (req, res) => {
     const { estado } = req.body;
 
     // Obtener el pedido para saber el email del usuario
-    const [pedido] = await pool.query('SELECT * FROM pedidos WHERE id = ?', [id]);
+    const [pedido] = await pool.query(
+      'SELECT p.*, pr.nombre AS producto_nombre FROM pedidos p LEFT JOIN productos pr ON p.producto_id = pr.id WHERE p.id = ?',
+      [id]
+    );
     
     if (pedido.length === 0) {
       return res.status(404).json({ mensaje: 'Pedido no encontrado' });
