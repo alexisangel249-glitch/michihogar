@@ -236,3 +236,18 @@ body.printing .fixed.inset-0 button { display:none !important; }
   .michi-footer-inner { grid-template-columns:1fr; }
   .michi-footer-bottom { align-items:flex-start; flex-direction:column; }
 }
+
+/* Contorno neón en los botones principales del inicio */
+.michi-button { position:relative; isolation:isolate; border:2px solid rgba(255,255,255,.95); }
+.michi-button:before {
+  content:""; position:absolute; z-index:-1; inset:-4px; border-radius:999px;
+  border:2px solid currentColor; opacity:.95;
+  filter:drop-shadow(0 0 4px currentColor) drop-shadow(0 0 9px currentColor);
+  transition:inset .25s ease,filter .25s ease;
+}
+.michi-button-primary { box-shadow:0 0 0 1px #ff9b7c,0 0 9px rgba(243,107,66,.72),0 5px 14px #8b57302b; }
+.michi-button-primary:before { color:#ff805b; }
+.michi-button-green { box-shadow:0 0 0 1px #b9e77b,0 0 9px rgba(130,173,67,.72),0 5px 14px #8b57302b; }
+.michi-button-green:before { color:#a8dc5e; }
+.michi-button:hover:before { inset:-6px; filter:drop-shadow(0 0 6px currentColor) drop-shadow(0 0 15px currentColor); }
+.michi-mission-cat img { display:block; width:min(100%,290px); height:auto; object-fit:contain; filter:drop-shadow(0 8px 8px rgba(130,78,48,.12)); }
