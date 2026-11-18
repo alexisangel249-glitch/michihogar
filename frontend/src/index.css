@@ -2,35 +2,35 @@
 /* ESTILOS GLOBALES DE MICHIADOPTA SHOP          */
 /* ============================================= */
 
-/* ⚠️ PRIMERO: el @import SIEMPRE va antes que cualquier otra regla */
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  html { font-size: 16px; }
   body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.05rem;
   }
 }
 
 @layer components {
-  .font-heading {
-    font-family: 'Fredoka One', cursive;
-  }
-  .font-body {
-    font-family: 'Inter', sans-serif;
-  }
+  .font-heading { font-family: 'Fredoka', sans-serif; }
+  .font-body { font-family: 'Nunito', sans-serif; }
+}
+
+.michi-float { animation: michiFloat 3.8s ease-in-out infinite; }
+.michi-float-slow { animation: michiFloat 5s ease-in-out infinite reverse; }
+.michi-kitty { filter: drop-shadow(0 8px 8px rgba(130, 78, 48, .12)); }
+@keyframes michiFloat {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
 }
 
 /* Estilos para impresión del ticket */
 @media print {
-  /* Ocultar todo excepto el ticket */
-  body * {
-    visibility: hidden !important;
-  }
-  
-  /* Mostrar solo el ticket */
+  body * { visibility: hidden !important; }
   .fixed.inset-0 {
     visibility: visible !important;
     position: absolute !important;
@@ -39,27 +39,10 @@
     width: 100% !important;
     background: white !important;
   }
-  
-  .fixed.inset-0 * {
-    visibility: visible !important;
-  }
-  
-  /* Ocultar botones al imprimir */
-  .fixed.inset-0 button {
-    display: none !important;
-  }
+  .fixed.inset-0 * { visibility: visible !important; }
+  .fixed.inset-0 button { display: none !important; }
 }
-
-/* Clase temporal para impresión */
-body.printing * {
-  visibility: hidden;
-}
-
+body.printing * { visibility: hidden; }
 body.printing .fixed.inset-0,
-body.printing .fixed.inset-0 * {
-  visibility: visible;
-}
-
-body.printing .fixed.inset-0 button {
-  display: none !important;
-}
+body.printing .fixed.inset-0 * { visibility: visible; }
+body.printing .fixed.inset-0 button { display: none !important; }
