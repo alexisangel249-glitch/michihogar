@@ -260,3 +260,21 @@ body.printing .fixed.inset-0 button { display:none !important; }
   .michi-hero-content { min-height:0; }
   .michi-hero-tree { min-height:0; height:100%; }
 }
+
+/* Corrección visible del contorno neón: outline y sombra por fuera del botón */
+.michi-button { position:relative; border:2px solid #fff !important; }
+.michi-button-primary {
+  outline:2px solid #ff805b; outline-offset:3px;
+  box-shadow:0 0 0 2px rgba(255,128,91,.45),0 0 10px 4px rgba(255,112,75,.72),0 0 22px 5px rgba(255,112,75,.34),0 5px 14px #8b57302b !important;
+}
+.michi-button-green {
+  outline:2px solid #a8dc5e; outline-offset:3px;
+  box-shadow:0 0 0 2px rgba(168,220,94,.48),0 0 10px 4px rgba(145,199,70,.72),0 0 22px 5px rgba(145,199,70,.34),0 5px 14px #8b57302b !important;
+}
+.michi-button-primary:hover { box-shadow:0 0 0 2px rgba(255,128,91,.6),0 0 14px 6px rgba(255,112,75,.88),0 0 28px 7px rgba(255,112,75,.45),0 5px 14px #8b57302b !important; }
+.michi-button-green:hover { box-shadow:0 0 0 2px rgba(168,220,94,.6),0 0 14px 6px rgba(145,199,70,.88),0 0 28px 7px rgba(145,199,70,.45),0 5px 14px #8b57302b !important; }
+@media (min-width:801px) {
+  .michi-hero { height:clamp(270px,22vw,350px) !important; min-height:0 !important; }
+  .michi-hero-photo,.michi-hero-photo img,.michi-hero-tree { height:100% !important; min-height:0 !important; }
+  .michi-hero-photo img { object-position:42% center !important; }
+}
