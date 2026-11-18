@@ -251,3 +251,12 @@ body.printing .fixed.inset-0 button { display:none !important; }
 .michi-button-green:before { color:#a8dc5e; }
 .michi-button:hover:before { inset:-6px; filter:drop-shadow(0 0 6px currentColor) drop-shadow(0 0 15px currentColor); }
 .michi-mission-cat img { display:block; width:min(100%,290px); height:auto; object-fit:contain; filter:drop-shadow(0 8px 8px rgba(130,78,48,.12)); }
+
+/* Mantener la portada panorámica, como en el mockup original */
+@media (min-width:801px) {
+  .michi-hero { height:clamp(300px,24vw,410px); min-height:0; }
+  .michi-hero-photo { min-height:0; height:100%; }
+  .michi-hero-photo img { min-height:0; height:100%; }
+  .michi-hero-content { min-height:0; }
+  .michi-hero-tree { min-height:0; height:100%; }
+}
